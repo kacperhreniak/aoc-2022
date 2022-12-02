@@ -10,4 +10,5 @@ Solutions for [Advent of Code 2022](https://adventofcode.com/2022).
 
 | Day | Puzzle | Language | Solution |
 | --: | :----- | :------- | :------- |
-| 1 | [Calorie Counting](https://adventofcode.com/2022/day/1) | C++ | [day1](src/day1) |
+| 01 | [Calorie Counting](https://adventofcode.com/2022/day/1) | C++ | [day1](src/day1) |
+| 02 | [Day 2: Rock Paper Scissors](https://adventofcode.com/2022/day/2) | C++ | [day2](src/day2) |
