@@ -16,3 +16,4 @@ Solutions for [Advent of Code 2022](https://adventofcode.com/2022).
 | 04 | [Camp Cleanup](https://adventofcode.com/2022/day/4) | Kotlin | [day4](src/day4) |
 | 05 | [Supply Stacks](https://adventofcode.com/2022/day/5) | Kotlin | [day5](src/day5) |
 | 06 | [Tuning Trouble](https://adventofcode.com/2022/day/6) | Kotlin | [day6](src/day6) |
+| 07 | [Tuning Trouble](https://adventofcode.com/2022/day/7) | Kotlin | [day7](src/day7) |
