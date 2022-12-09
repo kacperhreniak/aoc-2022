@@ -1,72 +1,89 @@
-# --- Day 8: Treetop Tree House ---
+# --- Day 9: Rope Bridge ---
 ### Part One
-The expedition comes across a peculiar patch of tall trees all planted carefully in a grid. The Elves explain that a previous expedition planted these trees as a reforestation effort. Now, they're curious if this would be a good location for a tree house.
+This rope bridge creaks as you walk along it. You aren't sure how old it is, or whether it can even support your weight.
 
-First, determine whether there is enough tree cover here to keep a tree house hidden. To do this, you need to count the number of trees that are visible from outside the grid when looking directly along a row or column.
+It seems to support the Elves just fine, though. The bridge spans a gorge which was carved out by the massive river far below you.
 
-The Elves have already launched a quadcopter to generate a map with the height of each tree (your puzzle input). For example:
+You step carefully; as you do, the ropes stretch and twist. You decide to distract yourself by modeling rope physics; maybe you can even figure out where not to step.
+
+Consider a rope with a knot at each end; these knots mark the head and the tail of the rope. If the head moves far enough away from the tail, the tail is pulled toward the head.
+
+Due to nebulous reasoning involving Planck lengths, you should be able to model the positions of the knots on a two-dimensional grid. Then, by following a hypothetical series of motions (your puzzle input) for the head, you can determine how the tail will move.
+
+Due to the aforementioned Planck lengths, the rope must be quite short; in fact, the head (H) and tail (T) must always be touching (diagonally adjacent and even overlapping both count as touching):
+For example:
 ```
-30373
-25512
-65332
-33549
-35390
+R 4
+U 4
+L 3
+D 1
+R 4
+D 1
+L 5
+R 2
 ```
-Each tree is represented as a single digit whose value is its height, where 0 is the shortest and 9 is the tallest.
+This series of motions moves the head right four steps, then up four steps, then left three steps, then down one step, and so on. After each step, you'll need to update the position of the tail if the step means the head is no longer adjacent to the tail.
+After simulating the rope, you can count up all of the positions the tail visited at least once. In this diagram, s again marks the starting position (which the tail also visited) and # marks other positions the tail visited:
+```
+..##..
+...##.
+.####.
+....#.
+s###..
+```
+So, there are `13` positions the tail visited at least once.
 
-A tree is visible if all of the other trees between it and an edge of the grid are shorter than it. Only consider trees in the same row or column; that is, only look up, down, left, or right from any given tree.
+Simulate your complete hypothetical series of motions. How many positions does the tail of the rope visit at least once?
 
-All of the trees around the edge of the grid are visible - since they are already on the edge, there are no trees to block the view. In this example, that only leaves the interior nine trees to consider:
-
-1. The top-left 5 is visible from the left and top. (It isn't visible from the right or bottom since other trees of height 5 are in the way.)
-2. The top-middle 5 is visible from the top and right.
-3. The top-right 1 is not visible from any direction; for it to be visible, there would need to only be trees of height 0 between it and an edge.
-4. The left-middle 5 is visible, but only from the right.
-5. The center 3 is not visible from any direction; for it to be visible, there would need to be only trees of at most height 2 between it and an edge.
-6. The right-middle 3 is visible from the right.
-7. In the bottom row, the middle 5 is visible, but the 3 and 4 are not.
-With `16` trees visible on the edge and another `5` visible in the interior, a total of `21` trees are visible in this arrangement.
-
-Consider your map; how many trees are visible from outside the grid?
-
-Your puzzle answer was `1859`.
+Your puzzle answer was `6209`.
 
 ### Part Two
-Content with the amount of tree cover available, the Elves just need to know the best spot to build their tree house: they would like to be able to see a lot of trees.
+A rope snaps! Suddenly, the river is getting a lot closer than you remember. The bridge is still there, but some of the ropes that broke are now whipping toward you as you fall through the air!
 
-To measure the viewing distance from a given tree, look up, down, left, and right from that tree; stop if you reach an edge or at the first tree that is the same height or taller than the tree under consideration. (If a tree is right on the edge, at least one of its viewing distances will be zero.)
+The ropes are moving too quickly to grab; you only have a few seconds to choose how to arch your body to avoid being hit. Fortunately, your simulation can be extended to support longer ropes.
 
-The Elves don't care about distant trees taller than those found by the rules above; the proposed tree house has large eaves to keep it dry, so they wouldn't be able to see higher than the tree house anyway.
+Rather than two knots, you now must simulate a rope consisting of ten knots. One knot is still the head of the rope and moves according to the series of motions. Each knot further down the rope follows the knot in front of it using the same rules as before.
 
-In the example above, consider the middle 5 in the second row:
+Using the same series of motions as the above example, but with the knots marked H, 1, 2, ..., 9.
+
+Now, you need to keep track of the positions the new tail, 9, visits. In this example, the tail never moves, and so it only visits 1 position. However, be careful: more types of motion are possible than before, so you might want to visually compare your simulated rope to the one above.
+
+Here's a larger example:
 ```
-30373
-25512
-65332
-33549
-35390
+R 5
+U 8
+L 8
+D 3
+R 17
+D 10
+L 25
+U 20
 ```
-
-1. Looking up, its view is not blocked; it can see 1 tree (of height 3).
-2. Looking left, its view is blocked immediately; it can see only 1 tree (of height 5, right next to it).
-3. Looking right, its view is not blocked; it can see 2 trees.
-4. Looking down, its view is blocked eventually; it can see 2 trees (one of height 3, then the tree of height 5 that blocks its view).
-A tree's scenic score is found by multiplying together its viewing distance in each of the four directions. For this tree, this is 4 (found by multiplying `1 * 1 * 2 * 2`).
-
-However, you can do even better: consider the tree of height 5 in the middle of the fourth row:
+Now, the tail (9) visits `36` positions (including s) at least once:
 ```
-30373
-25512
-65332
-33549
-35390
+..........................
+..........................
+..........................
+..........................
+..........................
+..........................
+..........................
+..........................
+..........................
+#.........................
+#.............###.........
+#............#...#........
+.#..........#.....#.......
+..#..........#.....#......
+...#........#.......#.....
+....#......s.........#....
+.....#..............#.....
+......#............#......
+.......#..........#.......
+........#........#........
+.........########.........
 ```
-1. Looking up, its view is blocked at 2 trees (by another tree with a height of 5).
-2. Looking left, its view is not blocked; it can see 2 trees.
-3. Looking down, its view is also not blocked; it can see 1 tree.
-4. Looking right, its view is blocked at 2 trees (by a massive tree of height 9).
-This tree's scenic score is `8 (2 * 2 * 1 * 2)`; this is the ideal spot for the tree house.
+Simulate your complete series of motions on a larger rope with ten knots. How many positions does the tail of the rope visit at least once?
 
-Consider each tree on your map. What is the highest scenic score possible for any tree?
+Your puzzle answer was `2460`.
 
-Your puzzle answer was `332640`.
