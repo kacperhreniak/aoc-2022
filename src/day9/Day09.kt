@@ -3,61 +3,11 @@ package day9
 import readInput
 import kotlin.math.abs
 
-private fun part1(input: List<String>): Int {
+private fun helper(input: List<String>,  points: Array<Pair<Int, Int>>): Int {
     fun createKey(point: Pair<Int, Int>): String = "${point.first},${point.second}"
-    val visited: MutableSet<String> = hashSetOf()
-    var headPoint = Pair(0, 0)
-    var tailPoint = Pair(0, 0)
-
-    var counter = 0
-    for (move in input) {
-        val parts = move.split(" ")
-        val direction = parts[0]
-        val steps = parts[1].toInt()
-
-        for (index in 0 until steps) {
-            if (visited.add(createKey(tailPoint))) {
-                counter++
-            }
-
-            headPoint = with(headPoint) {
-                when (direction) {
-                    "R"  -> Pair(first, second + 1)
-                    "L"  -> Pair(first, second - 1)
-                    "D"  -> Pair(first - 1, second)
-                    "U"  -> Pair(first + 1, second)
-                    else -> throw NullPointerException()
-                }
-            }
-
-            tailPoint = if (headPoint.first == tailPoint.first) {
-                val temp = (tailPoint.second - headPoint.second) / 2
-                Pair(tailPoint.first, tailPoint.second - temp)
-            } else if (headPoint.second == tailPoint.second) {
-                val temp = (tailPoint.first - headPoint.first) / 2
-                Pair(tailPoint.first - temp, tailPoint.second)
-            } else if (abs(headPoint.second - tailPoint.second) >= 2) {
-                val temp = (tailPoint.second - headPoint.second) / 2
-                Pair(headPoint.first, tailPoint.second - temp)
-            } else if (abs(headPoint.first - tailPoint.first) >= 2) {
-                val temp = (tailPoint.first - headPoint.first) / 2
-                Pair(tailPoint.first - temp, headPoint.second)
-            } else tailPoint
-
-            if (visited.add(createKey(tailPoint))) {
-                counter++
-            }
-        }
+    val visited: MutableSet<String> = hashSetOf<String>().apply {
+        add(createKey(points.last()))
     }
-
-    return counter
-}
-
-private fun part2(input: List<String>): Int {
-    fun createKey(point: Pair<Int, Int>): String = "${point.first},${point.second}"
-    val visited: MutableSet<String> = hashSetOf()
-    val points: Array<Pair<Int, Int>> = Array(10) { Pair(0, 0) }
-
     for (move in input) {
         val parts = move.split(" ")
         val direction = parts[0]
@@ -73,7 +23,7 @@ private fun part2(input: List<String>): Int {
                     else -> throw NullPointerException()
                 }
             }
-            for (index in 1..9) {
+            for (index in 1 until points.size) {
                 val tempHeadPoint = points[index - 1]
                 val tempTailPoint = points[index]
 
@@ -105,7 +55,17 @@ private fun part2(input: List<String>): Int {
             visited.add(createKey(points.last()))
         }
     }
+
     return visited.size
+}
+private fun part1(input: List<String>): Int {
+    val points: Array<Pair<Int, Int>> = Array(2) { Pair(0, 0) }
+    return helper(input, points)
+}
+
+private fun part2(input: List<String>): Int {
+    val points: Array<Pair<Int, Int>> = Array(10) { Pair(0, 0) }
+    return helper(input, points)
 }
 
 fun main() {
