@@ -18,4 +18,4 @@ Solutions for [Advent of Code 2022](https://adventofcode.com/2022).
 | 06 | [Tuning Trouble](https://adventofcode.com/2022/day/6) | Kotlin | [day6](src/day6) |
 | 07 | [No Space Left On Device](https://adventofcode.com/2022/day/7) | Kotlin | [day7](src/day7) |
 | 08 | [Treetop Tree House](https://adventofcode.com/2022/day/8) | Kotlin | [day8](src/day8) |
-| 09 | [TASK _ NAME](https://adventofcode.com/2022/day/9) | Kotlin | [day9](src/day9) |
+| 09 | [ROPE BRIDGE](https://adventofcode.com/2022/day/9) | Kotlin | [day9](src/day9) |
