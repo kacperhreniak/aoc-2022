@@ -3,7 +3,7 @@ package day9
 import readInput
 import kotlin.math.abs
 
-private fun helper(input: List<String>,  points: Array<Pair<Int, Int>>): Int {
+private fun helper(input: List<String>, points: Array<Pair<Int, Int>>): Int {
     fun createKey(point: Pair<Int, Int>): String = "${point.first},${point.second}"
     val visited: MutableSet<String> = hashSetOf<String>().apply {
         add(createKey(points.last()))
@@ -23,11 +23,14 @@ private fun helper(input: List<String>,  points: Array<Pair<Int, Int>>): Int {
                     else -> throw NullPointerException()
                 }
             }
+
             for (index in 1 until points.size) {
                 val tempHeadPoint = points[index - 1]
                 val tempTailPoint = points[index]
 
-                if (abs(tempTailPoint.second - tempHeadPoint.second) <= 1 && abs(tempHeadPoint.first - tempTailPoint.first) <= 1) {
+                val diffRow = tempHeadPoint.first - tempTailPoint.first
+                val diffCol = tempHeadPoint.second - tempTailPoint.second
+                if (abs(diffRow) <= 1 && abs(diffCol) <= 1) {
                     continue
                 }
 
@@ -39,16 +42,16 @@ private fun helper(input: List<String>,  points: Array<Pair<Int, Int>>): Int {
                     Pair(tempTailPoint.first - temp, tempTailPoint.second)
                 } else if (tempHeadPoint.first > tempTailPoint.first && tempHeadPoint.second < tempTailPoint.second) {
                     // top lef
-                    Pair(tempTailPoint.first + 1 , tempTailPoint.second - 1)
+                    Pair(tempTailPoint.first + 1, tempTailPoint.second - 1)
                 } else if (tempHeadPoint.first > tempTailPoint.first && tempHeadPoint.second > tempTailPoint.second) {
                     // top right
-                    Pair(tempTailPoint.first +1 , tempTailPoint.second + 1)
+                    Pair(tempTailPoint.first + 1, tempTailPoint.second + 1)
                 } else if (tempHeadPoint.first < tempTailPoint.first && tempHeadPoint.second < tempTailPoint.second) {
                     // bottom left
-                    Pair(tempTailPoint.first - 1 , tempTailPoint.second -1)
+                    Pair(tempTailPoint.first - 1, tempTailPoint.second - 1)
                 } else if (tempHeadPoint.first < tempTailPoint.first && tempHeadPoint.second > tempTailPoint.second) {
                     // bottom right
-                    Pair(tempTailPoint.first -1 , tempTailPoint.second + 1)
+                    Pair(tempTailPoint.first - 1, tempTailPoint.second + 1)
                 } else points[index]
             }
 
@@ -58,6 +61,7 @@ private fun helper(input: List<String>,  points: Array<Pair<Int, Int>>): Int {
 
     return visited.size
 }
+
 private fun part1(input: List<String>): Int {
     val points: Array<Pair<Int, Int>> = Array(2) { Pair(0, 0) }
     return helper(input, points)
