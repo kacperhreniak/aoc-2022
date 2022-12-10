@@ -34,27 +34,9 @@ private fun helper(input: List<String>, points: Array<Pair<Int, Int>>): Int {
                     continue
                 }
 
-                points[index] = if (tempHeadPoint.first == tempTailPoint.first) {
-                    val temp = (tempTailPoint.second - tempHeadPoint.second) / 2
-                    Pair(tempTailPoint.first, tempTailPoint.second - temp)
-                } else if (tempHeadPoint.second == tempTailPoint.second) {
-                    val temp = (tempTailPoint.first - tempHeadPoint.first) / 2
-                    Pair(tempTailPoint.first - temp, tempTailPoint.second)
-                } else if (tempHeadPoint.first > tempTailPoint.first && tempHeadPoint.second < tempTailPoint.second) {
-                    // top lef
-                    Pair(tempTailPoint.first + 1, tempTailPoint.second - 1)
-                } else if (tempHeadPoint.first > tempTailPoint.first && tempHeadPoint.second > tempTailPoint.second) {
-                    // top right
-                    Pair(tempTailPoint.first + 1, tempTailPoint.second + 1)
-                } else if (tempHeadPoint.first < tempTailPoint.first && tempHeadPoint.second < tempTailPoint.second) {
-                    // bottom left
-                    Pair(tempTailPoint.first - 1, tempTailPoint.second - 1)
-                } else if (tempHeadPoint.first < tempTailPoint.first && tempHeadPoint.second > tempTailPoint.second) {
-                    // bottom right
-                    Pair(tempTailPoint.first - 1, tempTailPoint.second + 1)
-                } else points[index]
+                val flowMove = Pair(diffRow.coerceIn(-1, 1), diffCol.coerceIn(-1, 1))
+                points[index] = Pair(tempTailPoint.first + flowMove.first, tempTailPoint.second + flowMove.second)
             }
-
             visited.add(createKey(points.last()))
         }
     }
