@@ -32,14 +32,11 @@ private fun part1(input: List<String>): Int {
     for (line in input) {
         val params = getParams(line)
 
-        for (step in 0 until params.first) {
-            cycle++
-            if (cycle == checkPoint) {
-                result += cycle * value
-                checkPoint += NEXT_CHECK
-            }
+        if ((cycle + params.first) % checkPoint < cycle) {
+            result += checkPoint * value
+            checkPoint += NEXT_CHECK
         }
-
+        cycle += params.first
         value += params.second
     }
     return result
@@ -65,7 +62,7 @@ private fun part2(input: List<String>) {
 }
 
 fun main() {
-    val input = readInput("day10/input")
+    val input = readInput("day10/test-input")
     println(part1(input))
     part2(input)
 }
