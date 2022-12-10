@@ -46,7 +46,6 @@ private fun part1(input: List<String>): Int {
 }
 
 private fun part2(input: List<String>) {
-    val result = mutableListOf<String>()
     var temp = ""
     var index = 1
     for (line in input) {
@@ -57,15 +56,11 @@ private fun part2(input: List<String>) {
             } else DARK_PIXEL
 
             if (temp.length == NEXT_CHECK) {
-                result.add(temp)
+                println(temp)
                 temp = ""
             }
         }
         index += params.second
-    }
-
-    for (line in result) {
-        println(line)
     }
 }
 
