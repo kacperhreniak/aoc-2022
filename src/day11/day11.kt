@@ -4,7 +4,6 @@ import readInput
 import java.util.*
 
 private fun parse(input: List<String>): List<Monkey> {
-
     fun parseItems(line: String): MutableList<Long> {
         val result = mutableListOf<Long>()
         val parts = line.split(":")
@@ -18,7 +17,6 @@ private fun parse(input: List<String>): List<Monkey> {
     fun operation(line: String): (item: Long) -> Long {
         val parts = line.split(": ")
         val items = parts[1].split("= ")[1].split(" ")
-
 
         return { value ->
             val secondItem = when (items[2]) {
@@ -50,11 +48,11 @@ private fun parse(input: List<String>): List<Monkey> {
     while (index < input.size) {
         if (input[index] == "") index++
         val id = result.size
-        val items = parseItems(input[index + 1])
-        val operation = operation(input[index + 2])
-        val division = divideBy(input[index + 3])
-        val ifTrue = action(input[index + 4])
-        val ifFalse = action(input[index + 5])
+        val items = parseItems(input[++index])
+        val operation = operation(input[++index])
+        val division = divideBy(input[++index])
+        val ifTrue = action(input[++index])
+        val ifFalse = action(input[++index])
 
         result.add(
             Monkey(
@@ -65,7 +63,7 @@ private fun parse(input: List<String>): List<Monkey> {
                 policy = Pair(ifTrue, ifFalse)
             )
         )
-        index += 6
+        index++
     }
 
     return result
