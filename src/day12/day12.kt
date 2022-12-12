@@ -1,44 +1,39 @@
 package day12
 
 import readInput
-import kotlin.math.abs
 
-private fun part1(input: List<String>): Int {
-    val grid = parse(input)
-    grid.second[grid.first.first][grid.first.second] = 'a'
-    return helperBFS(grid.second, grid.first)
-}
-
-private fun parse(input: List<String>): Pair<Pair<Int, Int>, Array<CharArray>> {
+private fun parse(input: List<String>): Array<CharArray> {
     val result = Array(input.size) { CharArray(input[0].length) }
 
-    var startPoint: Pair<Int, Int>? = null
     for ((row, line) in input.withIndex()) {
         for ((col, item) in line.withIndex()) {
-            if (item == 'S') {
-                startPoint = Pair(row, col)
-            }
             result[row][col] = item
         }
     }
-    return Pair(startPoint!!, result)
+    return result
 }
 
 private fun helperBFS(
     grid: Array<CharArray>,
-    startPoint: Pair<Int, Int>,
+    inputs: Set<Char>
 ): Int {
     val queue = ArrayDeque<Input>()
-    val input = Input(startPoint.first, startPoint.second, 0)
-    queue.addFirst(input)
 
     val visited = Array<BooleanArray>(grid.size) { BooleanArray(grid[0].size) }
+    for (row in 0 until grid.size) {
+        for (col in 0 until grid[0].size) {
+            val item = grid[row][col]
+            if (inputs.contains(item)) queue.addFirst(Input(row, col, 0))
+        }
+    }
+    var min = Int.MAX_VALUE
     while (queue.isNotEmpty()) {
         val item = queue.removeLast()
         if (visited[item.row][item.col]) continue
         val currentChar = grid[item.row][item.col]
-        if (currentChar == 'E') return item.counter
-
+        if (currentChar == 'E') {
+            return item.counter
+        }
         visited[item.row][item.col] = true
 
         val changes = listOf(
@@ -56,9 +51,8 @@ private fun helperBFS(
             }
 
             val nextItem = grid[newRow][newCol]
-            val value = currentChar - (if (nextItem == 'E') 'z' else nextItem)
-
-            if (value == 0 || abs(value) == 1) {
+            val value = (if (nextItem == 'E') 'z' else nextItem) - if (currentChar == 'S') 'a' else currentChar
+            if (value <= 1) {
                 queue.addFirst(
                     Input(
                         row = newRow,
@@ -69,7 +63,7 @@ private fun helperBFS(
             }
         }
     }
-    return Int.MIN_VALUE
+    return min
 }
 
 private data class Input(
@@ -78,8 +72,14 @@ private data class Input(
     val counter: Int
 )
 
+private fun part1(input: List<String>): Int {
+    val grid = parse(input)
+    return helperBFS(grid, setOf('S'))
+}
+
 private fun part2(input: List<String>): Int {
-    return 0
+    val grid = parse(input)
+    return helperBFS(grid, setOf('S', 'a'))
 }
 
 fun main() {
