@@ -21,23 +21,29 @@ private fun parsePackage(input: String, startIndex: Int = 1): Pair<Int, Package>
     val result = mutableListOf<Package>()
     var index = startIndex
 
-    var number = 0
+    var numberIndex = startIndex
     while (index < input.length) {
-        val item = input[index++]
-        if (item == '[') {
-            val temp = parsePackage(input, index)
-            index = temp.first
-            result.add(temp.second)
-        } else if (item == ']') {
-            result.add(Value(number))
-            return Pair(index, Items(result))
-        } else if (item == ',') {
-            result.add(Value(number))
-            number = 0
-        } else if (item.isDigit()) {
-            number = if (number == 0) {
-                item.digitToInt()
-            } else number * 10 + item.digitToInt()
+        when (input[index++]) {
+            '[' -> {
+                val temp = parsePackage(input, index)
+                index = temp.first
+                numberIndex = index
+                result.add(temp.second)
+            }
+            ']' -> {
+                input.substring(numberIndex, index - 1)
+                    .takeIf { it.isNotBlank() }?.let {
+                        result.add(Value(it.toInt()))
+                    }
+                return Pair(index, Items(result))
+            }
+            ',' -> {
+                input.substring(numberIndex, index - 1)
+                    .takeIf { it.isNotBlank() }?.let {
+                        result.add(Value(it.toInt()))
+                    }
+                numberIndex = index
+            }
         }
     }
 
