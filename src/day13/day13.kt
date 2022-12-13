@@ -1,6 +1,5 @@
 package day13
 
-import day13.Package.Companion.convert
 import day13.Package.Items
 import day13.Package.Value
 import readInput
@@ -22,6 +21,7 @@ private fun parsePackage(input: String, startIndex: Int = 1): Pair<Int, Package>
     val result = mutableListOf<Package>()
     var index = startIndex
 
+    var number = 0
     while (index < input.length) {
         val item = input[index++]
         if (item == '[') {
@@ -29,9 +29,15 @@ private fun parsePackage(input: String, startIndex: Int = 1): Pair<Int, Package>
             index = temp.first
             result.add(temp.second)
         } else if (item == ']') {
-            return Pair(index + 1, Items(result))
+            result.add(Value(number))
+            return Pair(index, Items(result))
+        } else if (item == ',') {
+            result.add(Value(number))
+            number = 0
         } else if (item.isDigit()) {
-            result.add(Value(item.digitToInt()))
+            number = if (number == 0) {
+                item.digitToInt()
+            } else number * 10 + item.digitToInt()
         }
     }
 
@@ -46,9 +52,9 @@ private fun verify(firstInput: Package, secondInput: Package): Int {
     if (firstInput is Value && secondInput is Value) {
         if (firstInput.value == secondInput.value) return 0
         return if (firstInput.value < secondInput.value) 1 else -1
-    }else if (firstInput is Value) {
+    } else if (firstInput is Value) {
         first = Items(listOf(firstInput))
-    } else if(second is Value) {
+    } else if (second is Value) {
         second = Items(listOf(secondInput))
     }
 
@@ -73,7 +79,6 @@ private fun handle(input: List<String>): Int {
     for ((index, item) in packages.withIndex()) {
         val temp = verify(item.first, item.second)
         if (temp >= 0) {
-            println("Result is $temp for index $index Should add it?: ${temp >= 0}")
             result += index + 1
         }
     }
@@ -85,20 +90,24 @@ private fun part1(input: List<String>): Int {
 }
 
 private fun part2(input: List<String>): Int {
-    return 0
+    fun verify(first: Package, input: List<String>): Int {
+        return input.mapNotNull { if (it.isBlank()) null else parsePackage(it).second }
+            .map { verify(first, it) }
+            .count { it == -1 }
+    }
+
+    val first = parsePackage("[[2]]").second
+    val second = parsePackage("[[6]]").second
+    return (verify(first, input) + 1) * (verify(second, input) + 2)
 }
 
 fun main() {
-    val input = readInput("day13/test-input")
-    println("Part 1 is ${part1(input)}")
-    println(part2(input))
+    val input = readInput("day13/input")
+    println("Part 1: ${part1(input)}")
+    println("Part 2: ${part2(input)}")
 }
 
 private sealed interface Package {
     data class Value(val value: Int) : Package
     data class Items(val items: List<Package>) : Package
-
-    companion object {
-        fun Value.convert() = Items(listOf(this))
-    }
 }
