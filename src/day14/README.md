@@ -19,9 +19,9 @@ The sand is pouring into the cave from point 500,0.
 Drawing rock as #, air as ., and the source of the sand as +, this becomes:
 
 ```
-4     5  5
-9     0  0
-4     0  3
+  4     5  5
+  9     0  0
+  4     0  3
 0 ......+...
 1 ..........
 2 ..........
