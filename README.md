@@ -24,3 +24,4 @@ Solutions for [Advent of Code 2022](https://adventofcode.com/2022).
 | 12 | [Hill Climbing Algorithm](https://adventofcode.com/2022/day/12) | Kotlin | [day12](src/day12) |
 | 13 | [Distress Signal](https://adventofcode.com/2022/day/13) | Kotlin | [day13](src/day13) |
 | 14 | [Regolith Reservoir](https://adventofcode.com/2022/day/14) | Kotlin | [day14](src/day14) |
+| 15 | [Beacon Exclusion Zone](https://adventofcode.com/2022/day/15) | Kotlin | [day15](src/day15) |
