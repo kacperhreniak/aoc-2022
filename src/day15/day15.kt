@@ -79,8 +79,8 @@ private fun solution2(
     return Long.MIN_VALUE
 }
 
-const val MAX_RANGE = 4_000_000
-const val MULTIPLIER = 4_000_000
+private const val MAX_RANGE = 4_000_000
+private const val MULTIPLIER = 4_000_000
 
 private fun part2(input: List<String>, scope: IntRange): Long {
     val parsedInput = parse(input)
