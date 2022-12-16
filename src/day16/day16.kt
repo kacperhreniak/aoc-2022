@@ -2,76 +2,85 @@ package day16
 
 import readInput
 
-fun parse(input: List<String>): HashMap<String, Pair<Int, Set<String>>> {
-    val items = HashMap<String, Pair<Int, Set<String>>>()
+fun parse(input: List<String>): Pair<Map<String, Map<String, Int>>, Map<String, Int>> {
+    val rates = HashMap<String, Int>()
+    val graph = HashMap<String, MutableMap<String, Int>>()
+
+    // create connections based on input
     for (line in input) {
         val parts = line.split("Valve ", " has flow rate=", "; tunnels lead to valves ", "; tunnel leads to valve ")
 
         val key = parts[1]
         val rate = parts[2].toInt()
-        val childs = parts[3].split(", ").toSet()
+        val children = parts[3].split(", ").toMutableSet()
 
-        items[key] = Pair(rate, childs)
+        rates[key] = rate
+        graph[key] = children.associateWith { 1 }.toMutableMap()
+        graph[key]!![key] = 0
     }
 
-    return items
-}
+    // check if can change
+    fun HashMap<String, MutableMap<String, Int>>.getHelper(start: String, end: String): Int {
+        val values = get(start).orEmpty()
+        return values[end] ?: Int.MAX_VALUE
+    }
 
-private fun solution(
-    input: HashMap<String, Pair<Int, Set<String>>>,
-    startPoint: String
-): Int {
-    val opened = hashSetOf<String>().apply { add(startPoint) }
-    val dp = HashMap<String, Int>()
-    return helper(
-        input,
-        startPoint,
-        dp,
-        opened,
-        30,
-        0
-    )
+    fun HashMap<String, MutableMap<String, Int>>.checkCondition(i: String, j: String, k: String): Boolean {
+        if (getHelper(i, k) == Int.MAX_VALUE || getHelper(k, j) == Int.MAX_VALUE) {
+            return false
+        }
+        return getHelper(i, j) > getHelper(i, k) + getHelper(k, j)
+    }
+
+    // find all paths for all nodes
+    val keys = graph.keys
+    for (k in keys) {
+        for (i in keys) {
+            for (j in keys) {
+                if (graph.checkCondition(i, j, k)) {
+                    graph[i]!![j] = graph.getHelper(i, k) + graph.getHelper(k, j)
+                }
+            }
+        }
+    }
+
+    // remove all insignificant paths
+    val result = graph.filter { it.key == "AA" || rates.getOrDefault(it.key, 0) > 0 }
+        .map { parent -> parent.key to parent.value.filter { it.key != parent.key && rates.getOrDefault(it.key, 0) > 0 } }
+        .filter { it.second.isNotEmpty() }
+        .toMap()
+
+    return Pair(result, rates)
 }
 
 private fun helper(
-    input: HashMap<String, Pair<Int, Set<String>>>,
-    key: String,
-    dp: HashMap<String, Int>,
-    opened: MutableSet<String>,
-    timer: Int,
-    pressureCount: Int
+    grid: Map<String, Map<String, Int>>,
+    rates: Map<String, Int>,
+    toVisit: Set<String>,
+    point: String = "AA",
+    time: Int = 30
 ): Int {
-    fun dpKey(key: String, timer: Int, opened: MutableSet<String>): String {
-        return "${key}_${timer}_${opened.toSortedSet()}"
+    if(time <= 0) return 0
+    var max = 0
+    for (next in toVisit) {
+        val moveTime = grid[point]!![next]!!
+        val pressure = rates[next]!!
+        val newVisited = HashSet(toVisit).apply { remove(next) }
+        val newTime = time - moveTime - 1
+        val value = newTime * pressure
+
+        val temp = value + helper(
+            grid, rates, newVisited, next, time - moveTime - 1
+        )
+        max = temp.coerceAtLeast(max)
     }
-    if (timer <= 0) return 0
-    if (opened.size == input.size) return timer * pressureCount
-
-    val dpKey = dpKey(key, timer, opened)
-    if (dp.contains(dpKey)) return dp[dpKey]!!
-
-    var max = Int.MIN_VALUE
-    if (opened.contains(key).not() && timer >= 2) {
-        val temp = HashSet(opened).apply { add(key) }
-        val newPressureCount = pressureCount + input[key]!!.first
-        max = newPressureCount + (input[key]!!.second
-            .filter { it != key }.maxOfOrNull {
-                pressureCount + helper(input, it, dp, temp, timer - 2, newPressureCount)
-            } ?: 0)
-    }
-    val tempMax = input[key]!!.second
-        .filter { it != key }.maxOfOrNull {
-            helper(input, it, dp, HashSet(opened), timer - 1, pressureCount)
-        } ?: 0
-
-    max = (pressureCount + tempMax).coerceAtLeast(max)
-    dp[dpKey] = max
     return max
 }
 
 private fun part1(input: List<String>): Int {
     val parsesInput = parse(input)
-    return solution(parsesInput, "AA")
+    val toVisit = parsesInput.second.filter { it.value > 0 }.keys
+    return helper(parsesInput.first, parsesInput.second, toVisit)
 }
 
 private fun part2(input: List<String>): Long {
@@ -79,7 +88,7 @@ private fun part2(input: List<String>): Long {
 }
 
 fun main() {
-    val input = readInput("day16/test-input")
+    val input = readInput("day16/input")
     println("Part 1: ${part1(input)}")
     println("Part 2: ${part2(input)}")
 }
