@@ -28,3 +28,4 @@ Solutions for [Advent of Code 2022](https://adventofcode.com/2022).
 
 
 | 23 | [Unstable Diffusion](https://adventofcode.com/2022/day/23) | Kotlin | [day23](src/day23) |
+| 24 | [Blizzard Basin](https://adventofcode.com/2022/day/24) | Kotlin | [day24](src/day24) |
