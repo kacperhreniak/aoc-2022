@@ -1,4 +1,4 @@
-#--- Day 24: Blizzard Basin ---
+# --- Day 24: Blizzard Basin ---
 
 ### ---Part-One---
 With everything replanted for next year (and with elephants and monkeys to tend the grove), you and the Elves leave for the extraction point.
