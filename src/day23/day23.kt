@@ -145,20 +145,3 @@ fun main() {
     println("Part 1: ${part1(input)}")
     println("Part 2: ${part2(input)}")
 }
-
-/*
-
-    for (index in top..bottom) {
-        if (elves[index].orEmpty().isEmpty()) continue
-        for (colIndex in left..right) {
-            if (elves[index]!!.contains(colIndex)) {
-                print("#")
-            } else print(".")
-        }
-        println()
-    }
-
-    println()
-
-
- */
