@@ -25,5 +25,6 @@ Solutions for [Advent of Code 2022](https://adventofcode.com/2022).
 | 13 | [Distress Signal](https://adventofcode.com/2022/day/13) | Kotlin | [day13](src/day13) |
 | 14 | [Regolith Reservoir](https://adventofcode.com/2022/day/14) | Kotlin | [day14](src/day14) |
 | 15 | [Beacon Exclusion Zone](https://adventofcode.com/2022/day/15) | Kotlin | [day15](src/day15) |
+| 16 | [Proboscidea Volcanium](https://adventofcode.com/2022/day/16) | Kotlin | [day16](src/day16) |
 | 23 | [Unstable Diffusion](https://adventofcode.com/2022/day/23) | Kotlin | [day23](src/day23) |
 | 24 | [Blizzard Basin](https://adventofcode.com/2022/day/24) | Kotlin | [day24](src/day24) |

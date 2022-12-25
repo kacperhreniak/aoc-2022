@@ -1,6 +1,8 @@
 package day16
 
 import readInput
+import java.util.UUID
+import kotlin.math.max
 
 fun parse(input: List<String>): Pair<Map<String, Map<String, Int>>, Map<String, Int>> {
     val rates = HashMap<String, Int>()
@@ -56,35 +58,65 @@ fun parse(input: List<String>): Pair<Map<String, Map<String, Int>>, Map<String, 
 private fun helper(
     grid: Map<String, Map<String, Int>>,
     rates: Map<String, Int>,
+    actors: Set<Actor>,
     toVisit: Set<String>,
-    point: String = "AA",
-    time: Int = 30
+    time: Int
 ): Int {
-    if(time <= 0) return 0
-    var max = 0
-    for (next in toVisit) {
-        val moveTime = grid[point]!![next]!!
-        val pressure = rates[next]!!
-        val newVisited = HashSet(toVisit).apply { remove(next) }
-        val newTime = time - moveTime - 1
+    fun handleNewDestination(actor: Actor, node: String): Pair<Int, Actor> {
+        val moveTime = grid[actor.node]!![node]!!
+        val pressure = rates[node]!!
+        val newTime = max(0, time - moveTime - 1)
         val value = newTime * pressure
 
-        val temp = value + helper(
-            grid, rates, newVisited, next, time - moveTime - 1
-        )
-        max = temp.coerceAtLeast(max)
+        val newActor = Actor(actor.id, node, newTime)
+        return Pair(value, newActor)
     }
+
+    if (time <= 0) return 0
+    var max = 0
+    val actor = actors.first { it.time >= time }
+    val otherActors = actors - actor
+
+    for (node in toVisit) {
+        val destination = handleNewDestination(actor, node)
+
+        val newVisited = HashSet(toVisit).apply {
+            remove(destination.second.node)
+        }
+        val newActors = mutableSetOf<Actor>().apply {
+            addAll(otherActors)
+            add(destination.second)
+        }
+
+        val nextTime = newActors.maxBy { it.time }.time
+        val tempValue = destination.first + helper(
+            grid, rates, newActors, newVisited, nextTime
+        )
+
+        max = tempValue.coerceAtLeast(max)
+    }
+
     return max
 }
+
+data class Actor(
+    val id: UUID = UUID.randomUUID(),
+    val node: String,
+    val time: Int,
+)
 
 private fun part1(input: List<String>): Int {
     val parsesInput = parse(input)
     val toVisit = parsesInput.second.filter { it.value > 0 }.keys
-    return helper(parsesInput.first, parsesInput.second, toVisit)
+    val actors = setOf(Actor(node = "AA", time = 30))
+    return helper(parsesInput.first, parsesInput.second, actors, toVisit, time = 30)
 }
 
-private fun part2(input: List<String>): Long {
-    return 0
+private fun part2(input: List<String>): Int {
+    val parsesInput = parse(input)
+    val toVisit = parsesInput.second.filter { it.value > 0 }.keys
+    val actors = setOf(Actor(node = "AA", time = 26), Actor(node = "AA", time = 26))
+    return helper(parsesInput.first, parsesInput.second, actors, toVisit, time = 26)
 }
 
 fun main() {
