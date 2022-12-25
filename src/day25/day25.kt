@@ -43,11 +43,7 @@ private fun convertToSNUFF(number: Long): String {
 
 private fun part1(input: List<String>): String {
     val sum = sumAllInput(input)
-    println("Sum is $sum")
-    val result = convertToSNUFF(sum)
-    val temp = convertToDecimal(result)
-
-    return result
+    return convertToSNUFF(sum)
 }
 
 private fun part2(input: List<String>): Int {
