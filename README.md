@@ -27,6 +27,7 @@ Solutions for [Advent of Code 2022](https://adventofcode.com/2022).
 | 15 | [Beacon Exclusion Zone](https://adventofcode.com/2022/day/15) | Kotlin | [day15](src/day15) |
 | 16 | [Proboscidea Volcanium](https://adventofcode.com/2022/day/16) | Kotlin | [day16](src/day16) |
 | 19 | [Not Enough Minerals](https://adventofcode.com/2022/day/19) | Kotlin | [day19](src/day19) |
+| 20 | [Grove Positioning System](https://adventofcode.com/2022/day/20) | Kotlin | [day20](src/day20) |
 | 21 | [Monkey Math](https://adventofcode.com/2022/day/21) | Kotlin | [day21](src/day21) |
 | 22 | [Monkey Map](https://adventofcode.com/2022/day/22) | Kotlin | [day22](src/day22) |
 | 23 | [Unstable Diffusion](https://adventofcode.com/2022/day/23) | Kotlin | [day23](src/day23) |
