@@ -26,6 +26,7 @@ Solutions for [Advent of Code 2022](https://adventofcode.com/2022).
 | 14 | [Regolith Reservoir](https://adventofcode.com/2022/day/14) | Kotlin | [day14](src/day14) |
 | 15 | [Beacon Exclusion Zone](https://adventofcode.com/2022/day/15) | Kotlin | [day15](src/day15) |
 | 16 | [Proboscidea Volcanium](https://adventofcode.com/2022/day/16) | Kotlin | [day16](src/day16) |
+| 17 | [Pyroclastic Flow](https://adventofcode.com/2022/day/17) | Kotlin | [day17](src/day17) |
 | 18 | [Boiling Boulders](https://adventofcode.com/2022/day/18) | Kotlin | [day18](src/day18) |
 | 19 | [Not Enough Minerals](https://adventofcode.com/2022/day/19) | Kotlin | [day19](src/day19) |
 | 20 | [Grove Positioning System](https://adventofcode.com/2022/day/20) | Kotlin | [day20](src/day20) |
